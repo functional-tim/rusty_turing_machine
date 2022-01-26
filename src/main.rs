@@ -23,18 +23,18 @@ fn main() {
                         (
                             String::from("1"),
                             turing_machine::Move::R,
-                            String::from("B")
-                        )
+                            String::from("B"),
+                        ),
                     ),
                     (
                         String::from("1"),
                         (
                             String::from("1"),
                             turing_machine::Move::R,
-                            String::from("HALT")
-                        )
-                    )
-                ])
+                            String::from("HALT"),
+                        ),
+                    ),
+                ]),
             ),
             (
                 String::from("B"),
@@ -44,18 +44,18 @@ fn main() {
                         (
                             String::from("1"),
                             turing_machine::Move::L,
-                            String::from("B")
-                        )
+                            String::from("B"),
+                        ),
                     ),
                     (
                         String::from("1"),
                         (
                             String::from("0"),
                             turing_machine::Move::R,
-                            String::from("C")
-                        )
-                    )
-                ])
+                            String::from("C"),
+                        ),
+                    ),
+                ]),
             ),
             (
                 String::from("C"),
@@ -65,24 +65,23 @@ fn main() {
                         (
                             String::from("1"),
                             turing_machine::Move::L,
-                            String::from("C")
-                        )
+                            String::from("C"),
+                        ),
                     ),
                     (
                         String::from("1"),
                         (
                             String::from("1"),
                             turing_machine::Move::L,
-                            String::from("A")
-                        )
-                    )
-                ])
-
+                            String::from("A"),
+                        ),
+                    ),
+                ]),
             ),
         ]),
-        turing_machine::Tape::new()
+        turing_machine::Tape::new(),
     );
-    println!("{:?}", tm);
+    println!("{}", tm);
     tm.run();
-    println!("{:?}", tm);
+    println!("{}", tm);
 }
