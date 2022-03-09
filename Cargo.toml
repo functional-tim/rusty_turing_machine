@@ -9,8 +9,6 @@ edition = "2018"
 [dependencies]
 exitcode = "^1.1"
 indexmap = { version = "^1.8", features = ["serde-1"] }
-num-bigint = "^0.4"
-num-traits = "^0.2"
 serde = "^1.0"
 serde_derive = "^1.0"
 structopt = "^0.3"
