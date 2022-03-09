@@ -3,48 +3,51 @@
  *
  * (C) 2021 Tim Gravert <tim.gravert@web.de>
  *
- * License: MIT OR Aüache-2.0
+ * License: MIT OR Apache-2.0
  *
  */
 
-use num_bigint::BigUint;
-use num_traits::Zero;
-use std::collections::{HashMap, VecDeque};
+use indexmap::map::IndexMap;
+use serde_derive::{Serialize, Deserialize};
+//use std::collections::HashMap;
+use std::collections::VecDeque;
 use std::fmt;
 
-#[derive(Debug)]
+/// Implementation of a Turing machine
+#[derive(Debug, Deserialize, Serialize)]
 pub struct TuringMachine {
+    steps: usize,
     state: String,
-    table: Table,
-    //table: HashMap<String, HashMap<String, (String, Move, String)>>,
+    table: IndexMap<String, IndexMap<String, (String, Move, String)>>,
     tape: Tape,
-    counter: BigUint,
 }
 
 impl TuringMachine {
-    pub fn new(
-        s: String,
-        tb: HashMap<String, HashMap<String, (String, Move, String)>>,
-        tp: Tape,
-    ) -> TuringMachine {
-        TuringMachine {
-            state: s,
-            table: Table::new(tb),
-            tape: tp,
-            counter: Zero::zero(),
-        }
+    /// Count the ones on the tape especially useful for the busy beavers game
+    pub fn count1s(&mut self) -> u128 {
+        self.tape.count1s()
     }
 
+    /// Run the Turing machine until it halts (if it halts ;) ).
     pub fn run(&mut self) {
         while self.state != "HALT" {
             self.step();
         }
     }
 
+    /// Run the Turing machine until it halts (if it halts). Print every step of that.
+    pub fn run_print(&mut self) {
+        while self.state != "HALT" {
+            self.step();
+            println!("{}", self);
+        }
+    }
+
+    /// Do one step of the Turing machine.
     pub fn step(&mut self) {
         if self.state != "HALT" {
-            self.counter += 1_usize;
-            let next = match self.table.table.get(&self.state) {
+            self.steps += 1;
+            let next = match self.table.get(&self.state) {
                 Some(x) => match x.get(&self.tape.center) {
                     Some(x) => x,
                     None => panic!("Error1"),
@@ -58,25 +61,16 @@ impl TuringMachine {
     }
 }
 
-#[derive(Debug)]
-pub struct Table {
-    table: HashMap<String, HashMap<String, (String, Move, String)>>,
-}
-
-impl Table {
-    fn new(ta: HashMap<String, HashMap<String, (String, Move, String)>>) -> Table {
-        Table { table: ta }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+/// Implementation of the movement of the head of the tape.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum Move {
     L,
     R,
     N,
 }
 
-#[derive(Debug)]
+/// Implementation of the tape of the Turing machine.
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Tape {
     left: VecDeque<String>,
     center: String,
@@ -84,6 +78,24 @@ pub struct Tape {
 }
 
 impl Tape {
+    fn count1s(&mut self) -> u128 {
+        let mut steps = 0;
+        for t in self.left.iter() {
+            if t == "1" {
+                steps += 1;
+            }
+        }
+        if self.center == "1" {
+            steps += 1;
+        }
+        for t in self.right.iter() {
+            if t == "1" {
+                steps += 1;
+            }
+        }
+        steps
+    }
+
     fn mov(&mut self, dir: Move) {
         if dir == Move::L {
             self.right.push_front(self.center.clone());
@@ -100,14 +112,6 @@ impl Tape {
         } else if dir == Move::N {
         }
     }
-
-    pub fn new() -> Tape {
-        Tape {
-            left: VecDeque::from(vec!["0".to_owned(); 4]),
-            center: "0".to_string(),
-            right: VecDeque::from(vec!["0".to_owned(); 4]),
-        }
-    }
 }
 
 impl fmt::Display for TuringMachine {
@@ -115,25 +119,19 @@ impl fmt::Display for TuringMachine {
         write!(
             f,
             "Steps: {}\nState: {}\nTable:\n",
-            self.counter, self.state
+            self.steps, self.state
         )?;
-        write!(f, "{}", self.table)?;
-        writeln!(f, "{}", self.tape)
-    }
-}
-
-impl fmt::Display for Table {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         for (count, (s, c)) in self.table.iter().enumerate() {
             if count != 0 {
                 writeln!(f)?;
             }
             write!(f, "{}:", s)?;
             for (r, a) in c {
-                write!(f, "  {}: |{} {} {}|", r, a.0, a.1, a.2)?;
+                write!(f, "  {}: |{} {} {:4}|", r, a.0, a.1, a.2)?;
             }
         }
-        writeln!(f)
+        writeln!(f)?;
+        writeln!(f, "{}", self.tape)
     }
 }
 
@@ -150,7 +148,7 @@ impl fmt::Display for Move {
 impl fmt::Display for Tape {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "|")?;
-        for t in self.left.iter() {
+        for t in self.left.iter().rev() {
             write!(f, "|{}", t)?;
         }
         write!(f, "[{}]", self.center)?;

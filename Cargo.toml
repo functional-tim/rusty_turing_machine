@@ -7,5 +7,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num-bigint = "0.4"
-num-traits = "0.2"
+exitcode = "^1.1"
+indexmap = { version = "^1.8", features = ["serde-1"] }
+num-bigint = "^0.4"
+num-traits = "^0.2"
+serde = "^1.0"
+serde_derive = "^1.0"
+structopt = "^0.3"
+toml = "^0.5"
