@@ -19,7 +19,7 @@ mod turing_machine;
 #[derive(StructOpt)]
 #[structopt(
     name = "rusty-turing-machine",
-    about = "WIP"
+    about = "A simple Turing machine command line program. It is reasonably fast."
 )]
 enum Command {
     /// Run the Turing machine until it halts (if it halts ;) )

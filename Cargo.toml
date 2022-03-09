@@ -3,8 +3,13 @@ name = "rusty-turing-machine"
 version = "0.1.0"
 authors = ["functional-tim <tim.gravert@web.de>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "A simple Turing machine command line program. It is reasonably fast."
+readme = "README.md"
+homepage = "https://github.com/functional-tim/rusty-turing-machine"
+repository = "https://github.com/functional-tim/rusty-turing-machine"
+license = "MIT OR Apache-2.0"
+keywords = ["education", "turing-machine"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 exitcode = "^1.1"

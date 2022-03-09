@@ -45,8 +45,3 @@ $ > cargo install --path
 
 ## License
 rusty-turing-machine is dual licensed under [MIT License](LICENSE-MIT) and [Apache 2 License](LICENSE-APACHE).
-
-## Credits and Acknowledgments
-
-- Randall Munroe for the idea
-- Alan Beale for 12dicts word lists (http://wordlist.aspell.net/12dicts/)
