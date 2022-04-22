@@ -8,34 +8,38 @@
  */
 
 use indexmap::map::IndexMap;
-use serde_derive::{Serialize, Deserialize};
+use serde_derive::{Deserialize, Serialize};
 //use std::collections::HashMap;
 use std::collections::VecDeque;
 use std::fmt;
 
-/// Implementation of a Turing machine
+// Implementation of a Turing machine
 #[derive(Debug, Deserialize, Serialize)]
 pub struct TuringMachine {
+    // Number of steps taken by the Turing machine
     steps: usize,
+    // Current state of the Turing machine
     state: String,
+    // Table of instructions for the Turing machine
     table: IndexMap<String, IndexMap<String, (String, Move, String)>>,
+    // Tape of the Turing machine
     tape: Tape,
 }
 
 impl TuringMachine {
-    /// Count the ones on the tape especially useful for the busy beavers game
+    // Count the ones on the tape especially useful for the busy beaver game
     pub fn count1s(&mut self) -> u128 {
         self.tape.count1s()
     }
 
-    /// Run the Turing machine until it halts (if it halts ;) ).
+    // Run the Turing machine until it halts (if it halts ;) ).
     pub fn run(&mut self) {
         while self.state != "HALT" {
             self.step();
         }
     }
 
-    /// Run the Turing machine until it halts (if it halts). Print every step of that.
+    // Run the Turing machine until it halts (if it halts). Print every step of that.
     pub fn run_print(&mut self) {
         while self.state != "HALT" {
             self.step();
@@ -43,10 +47,11 @@ impl TuringMachine {
         }
     }
 
-    /// Do one step of the Turing machine.
+    // Do one step of the Turing machine.
     pub fn step(&mut self) {
         if self.state != "HALT" {
             self.steps += 1;
+            // Panic if the current value is not in the table
             let next = match self.table.get(&self.state) {
                 Some(x) => match x.get(&self.tape.center) {
                     Some(x) => x,
@@ -54,14 +59,17 @@ impl TuringMachine {
                 },
                 None => panic!("Error2"),
             };
+            // Get the new value for the position
             self.tape.center = next.0.clone();
+            // Move according to the rule
             self.tape.mov(next.1);
+            // Set the new state according to the rule
             self.state = next.2.to_string();
         }
     }
 }
 
-/// Implementation of the movement of the head of the tape.
+// Implementation of the movement instructions of the head of the tape.
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub enum Move {
     L,
@@ -69,7 +77,8 @@ pub enum Move {
     N,
 }
 
-/// Implementation of the tape of the Turing machine.
+// Implementation of the tape of the Turing machine.
+// Using VecDeque to have fast speed
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Tape {
     left: VecDeque<String>,
@@ -78,24 +87,26 @@ pub struct Tape {
 }
 
 impl Tape {
+    // Function to count the ones on the tape for something like the busy beaver game
     fn count1s(&mut self) -> u128 {
-        let mut steps = 0;
+        let mut ones = 0;
         for t in self.left.iter() {
             if t == "1" {
-                steps += 1;
+                ones += 1;
             }
         }
         if self.center == "1" {
-            steps += 1;
+            ones += 1;
         }
         for t in self.right.iter() {
             if t == "1" {
-                steps += 1;
+                ones += 1;
             }
         }
-        steps
+        ones
     }
 
+    // Move the head of the Turing machine on the tape
     fn mov(&mut self, dir: Move) {
         if dir == Move::L {
             self.right.push_front(self.center.clone());
@@ -116,11 +127,7 @@ impl Tape {
 
 impl fmt::Display for TuringMachine {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "Steps: {}\nState: {}\nTable:\n",
-            self.steps, self.state
-        )?;
+        write!(f, "Steps: {}\nState: {}\nTable:\n", self.steps, self.state)?;
         for (count, (s, c)) in self.table.iter().enumerate() {
             if count != 0 {
                 writeln!(f)?;
@@ -147,17 +154,17 @@ impl fmt::Display for Move {
 
 impl fmt::Display for Tape {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "|")?;
+        write!(f, "--")?;
         for t in self.left.iter().rev() {
-            write!(f, "|{}", t)?;
+            write!(f, "-{}", t)?;
         }
         write!(f, "[{}]", self.center)?;
         for (count, t) in self.right.iter().enumerate() {
             if count != 0 {
-                write!(f, "|")?;
+                write!(f, "-")?;
             }
             write!(f, "{}", t)?;
         }
-        write!(f, "||")
+        write!(f, "---")
     }
 }
