@@ -1,5 +1,5 @@
 [package]
-name = "rusty_turing_machine"
+name = "rusty-turing-machine"
 version = "0.1.1"
 authors = ["functional-tim <tim.gravert@web.de>"]
 edition = "2021"
