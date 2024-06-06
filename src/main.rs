@@ -22,43 +22,43 @@ mod turing_machine;
     about = "A simple Turing machine command line program. It is reasonably fast."
 )]
 enum Command {
-    // Run the Turing machine until it halts (if it halts ;) )
+    /// Run the Turing machine until it halts (if it halts ;) )
     Run(OptR),
 
-    // Run only one step of the Turing Turing machine
+    /// Run only one step of the Turing Turing machine
     Step(OptS),
 }
 
 #[derive(StructOpt)]
 struct OptR {
-    // Input file
+    /// Input file
     #[structopt(parse(from_os_str), short = "i", long = "input")]
     file: Option<PathBuf>,
 
-    // Print every step
+    /// Print every step
     #[structopt(short = "p", long = "print")]
     pr: bool,
 
-    // Count 1s especially for busy beavers
+    /// Count 1s especially useful for busy beavers
     #[structopt(short = "c", long = "count")]
     count: bool,
 
-    // Output file
+    /// Output file
     #[structopt(short = "o", long = "output")]
     output: Option<PathBuf>,
 }
 
 #[derive(StructOpt)]
 struct OptS {
-    // Input file
+    /// Input file
     #[structopt(parse(from_os_str), short = "i", long = "input")]
     file: Option<PathBuf>,
 
-    // Count 1s especially for busy beavers
+    /// Count 1s especially for busy beavers
     #[structopt(short = "c", long = "count")]
     count: bool,
 
-    // Output file
+    /// Output file
     #[structopt(short = "o", long = "output")]
     output: Option<PathBuf>,
 }
