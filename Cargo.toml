@@ -1,6 +1,6 @@
 [package]
 name = "rusty-turing-machine"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["functional-tim <tim.gravert@web.de>"]
 edition = "2021"
 description = "A simple Turing machine command line program. It is reasonably fast."
