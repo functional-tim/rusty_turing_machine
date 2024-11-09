@@ -15,7 +15,7 @@ use structopt::StructOpt;
 
 mod turing_machine;
 
-/// Struct for the parameters of the app.
+// Struct for the parameters of the app.
 #[derive(StructOpt)]
 #[structopt(
     name = "rusty-turing-machine",
@@ -39,7 +39,7 @@ struct OptR {
     #[structopt(short = "p", long = "print")]
     pr: bool,
 
-    /// Count 1s especially for busy beavers
+    /// Count 1s especially useful for busy beavers
     #[structopt(short = "c", long = "count")]
     count: bool,
 

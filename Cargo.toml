@@ -1,20 +1,20 @@
 [package]
 name = "rusty-turing-machine"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["functional-tim <tim.gravert@web.de>"]
-edition = "2018"
+edition = "2021"
 description = "A simple Turing machine command line program. It is reasonably fast."
 readme = "README.md"
-homepage = "https://github.com/functional-tim/rusty-turing-machine"
-repository = "https://github.com/functional-tim/rusty-turing-machine"
+homepage = "https://github.com/functional-tim/rusty_turing_machine"
+repository = "https://github.com/functional-tim/rusty_turing_machine"
 license = "MIT OR Apache-2.0"
 keywords = ["education", "turing-machine"]
 categories = ["command-line-utilities"]
 
 [dependencies]
 exitcode = "^1.1"
-indexmap = { version = "^1.8", features = ["serde-1"] }
+indexmap = { version = "^2.2", features = ["serde"] }
 serde = "^1.0"
 serde_derive = "^1.0"
 structopt = "^0.3"
-toml = "^0.5"
+toml = "^0.8"
